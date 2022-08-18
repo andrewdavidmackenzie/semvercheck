@@ -1,3 +1,4 @@
+use git2::BranchType;
 use semver::{BuildMetadata, Prerelease, Version, VersionReq};
 
 fn main() {
@@ -6,8 +7,25 @@ fn main() {
     match Repository::open(std::env::current_dir().unwrap()) {
         Ok(repo) => {
             println!("Opened {:?}", repo.path());
-            let head = repo.head().unwrap();
-            println!("HEAD is local branch {}", head.is_branch());
+            match repo.head() {
+                Ok(head) => {
+                    if head.is_branch() {
+                        println!("'HEAD' is a local branch");
+                        if let Some(name) = head.shorthand() {
+                            println!("Shorthand name is '{}'", name);
+                        }
+                    }
+                },
+                _ => println!("Could not get Reference to HEAD"),
+            }
+
+            if repo.find_branch("master", BranchType::Remote).is_ok() {
+                println!("Remote 'master' exists");
+            } else if repo.find_branch("main", BranchType::Remote).is_ok() {
+                println!("Remote 'main' exists");
+            } else {
+                println!("Could not find remote 'master' or 'main' branch");
+            }
         },
         Err(e) => panic!("failed to open: {}", e),
     };
