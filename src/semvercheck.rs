@@ -10,21 +10,23 @@ fn main() {
             match repo.head() {
                 Ok(head) => {
                     if head.is_branch() {
-                        println!("'HEAD' is a local branch");
+                        print!("'HEAD' refers to a local branch");
                         if let Some(name) = head.shorthand() {
-                            println!("Shorthand name is '{}'", name);
+                            println!(" named '{}' ('{}')", name, head.name().unwrap_or(""));
+                        } else {
+                            println!(" name unknown");
                         }
+                    } else {
+                        println!("'HEAD' is not a local branch");
                     }
                 },
                 _ => println!("Could not get Reference to HEAD"),
             }
 
-            if repo.find_branch("master", BranchType::Remote).is_ok() {
-                println!("Remote 'master' exists");
-            } else if repo.find_branch("main", BranchType::Remote).is_ok() {
-                println!("Remote 'main' exists");
-            } else {
-                println!("Could not find remote 'master' or 'main' branch");
+            match repo.find_branch("origin/master", BranchType::Remote)
+                .or(repo.find_branch("origin/main", BranchType::Remote)) {
+                Ok(origin) => println!("Found '{}'", origin.name().unwrap().unwrap()),
+                _ => println!("Could not find 'origin/master' or 'origin/main'"),
             }
         },
         Err(e) => panic!("failed to open: {}", e),
