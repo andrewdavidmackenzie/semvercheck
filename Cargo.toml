@@ -1,0 +1,17 @@
+[package]
+name = "semvercheck"
+version = "0.1.0"
+edition = "2021"
+authors = ["Andrew Mackenzie <andrew@mackenzie-serres.net>"]
+description = "A semver checking command for cargo or standalone"
+license = "MIT"
+repository = "https://github.com/andrewdavidmackenzie/semvercheck/"
+readme = "README.md"
+
+[[bin]]
+name = "semvercheck"
+path = "src/semvercheck.rs"
+
+[dependencies]
+semver = "1.0"
+git2 = "0.15"
