@@ -32,6 +32,23 @@ fn main() {
         Err(e) => panic!("failed to open: {}", e),
     };
 
+
+    // See if it's a workspace project and if so repeat for all sub projects
+
+    // get the version of the local branch from Cargo.toml
+
+    // get the version of the remote branch from Cargo.toml
+
+    // Determine what type of change in the version numbers has been made
+    // if in verbose mode, print both out and the type of change made
+
+    // For each code change, check against the rules and classify the change as being of type:
+    // requiring major change
+    // requiring minor change
+    // requiring micro change
+    // not requiring a change
+    // If the change type is > than the version number change made, print it out with an explanation
+
     let req = VersionReq::parse(">=1.2.3, <1.8.0").unwrap();
 
     // Check whether this requirement matches version 1.2.3-alpha.1 (no)
